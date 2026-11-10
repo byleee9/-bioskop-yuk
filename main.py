@@ -4,12 +4,12 @@ from tkinter import messagebox
 class AplikasiBioskopIta:
     def __init__(self, root):
         self.root = root
-        self.root.title("Bioskop Yuk! - Tugas Ita")
+        self.root.title("Bioskop Yuk")
         self.root.geometry("600x500")
         self.root.configure(bg="#ffe4e1") # Tema soft pink sesuai preferensi
 
         # Variabel dan Tipe Data (Tugas Ita: Kerangka Utama & Variabel Dasar)
-        self.nama_aplikasi = "BIOSKOP YUK!"
+        self.nama_aplikasi = "BIOSKOP YUK"
         self.versi = 1.0
 
         # Header / Judul Utama
