@@ -3,7 +3,7 @@ import random
 from datetime import datetime
 
 st.set_page_config(
-    page_title="Cinema 21 - m.tix XXI Mobile",
+    page_title="Bioskop Yuk! - m.tix Mobile",
     page_icon="🎬",
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -110,6 +110,14 @@ st.markdown("""
         background: #181E34 !important;
         box-shadow: 0 4px 20px rgba(255, 182, 193, 0.15) !important;
     }
+    .stImage img {
+        object-fit: cover !important;
+        aspect-ratio: 2/3 !important;
+        width: 100% !important;
+        height: 240px !important;
+        background-color: #0F1221 !important;
+        border-radius: 10px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -139,7 +147,7 @@ MOVIES = [
         "duration": "118 Menit",
         "genre": "Horror, Mystery",
         "price": 45000,
-        "image": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80",
+        "image": "https://tse2.mm.bing.net/th/id/OIP.r65j9DnxG9xK8SPyQ1jNYgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
         "synopsis": "Keluarga Rini menemukan rahasia kelam di balik sekte misterius yang kembali bangkit menuntut tumbal."
     },
     {
@@ -150,7 +158,7 @@ MOVIES = [
         "duration": "192 Menit",
         "genre": "Action, Sci-Fi, Adventure",
         "price": 50000,
-        "image": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
+        "image": "https://resizing.flixster.com/Pq8B1yv0h4jocOwrukzjlvcdQDQ=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzRlNjBlZDhkLTg3NjItNDgzNy05OWYyLTE4ODI0MjBmMGU0OC5qcGc=",
         "synopsis": "Perjalanan keluarga Jake Sully menghadapi bangsa api Na'vi yang bringas di wilayah terlarang Pandora."
     },
     {
@@ -161,7 +169,7 @@ MOVIES = [
         "duration": "115 Menit",
         "genre": "Comedy, Drama",
         "price": 40000,
-        "image": "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80",
+        "image": "https://tse1.mm.bing.net/th/id/OIP.6_cjZv7Z6HClzBvEsGWC_wHaJ4?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
         "synopsis": "Empat sekawan penjaga pasar malam terseret dalam investigasi komedi kocak penuh tawa."
     },
     {
@@ -172,7 +180,7 @@ MOVIES = [
         "duration": "180 Menit",
         "genre": "Action, Superhero, Sci-Fi",
         "price": 55000,
-        "image": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80",
+        "image": "https://tse3.mm.bing.net/th/id/OIP.ugDqXszxERBLhreQDQPtRwHaK-?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
         "synopsis": "Pertempuran penutup multiverse MCU dengan kolaborasi superhero lintas dimensi paling akbar."
     }
 ]
@@ -186,7 +194,7 @@ FB_MENU = [
 
 st.markdown("""
 <div class="mobile-header">
-    <div class="xxi-logo">CINEMA 21 𐙚 𐙚 𐙚 𐙚 𐙚 𐙚 𐙚</div>
+    <div class="xxi-logo">BIOSKOP YUK! 𐙚 𐙚 𐙚 𐙚</div>
     <div><span class="xxi-badge">m.tix Official</span></div>
 </div>
 """, unsafe_allow_html=True)
@@ -387,7 +395,7 @@ elif st.session_state.step == "tiket_selesai":
         clean_payment = clean_payment.replace(icon, '').strip()
 
     with st.container(border=True):
-        st.subheader("CINEMA 21 𐙚 𐙚 𐙚 𐙚 𐙚 𐙚 𐙚")
+        st.subheader("BIOSKOP YUK! 𐙚 𐙚 𐙚 𐙚")
         st.caption("m.tix Official Electronic Ticket")
         
         col_c1, col_c2 = st.columns([1, 1])
