@@ -1,25 +1,16 @@
-# UI/UX Design & Architecture Specification (design.md) — "Bioskop Yuk!"
+# UI/UX Design & Architecture Specification (design.md) - Python Tkinter GUI
 
-## 1. Konsep & Arsitektur Desain
-Aplikasi web ini dirancang menggunakan paradigma Mobile-First Design agar menyerupai aplikasi seluler resmi m.tix Cinema 21. Seluruh elemen antarmuka dibungkus dalam kontainer berukuran seluler dengan orientasi vertikal yang bersih.
+## 1. Konsep Desain Sinematik Elegan
+Aplikasi menggunakan paradigma antarmuka desktop modern dengan sentuhan bioskop VIP eksklusif.
 
-## 2. Panduan Warna & Tipografi (Pastel Theme)
-- Background Utama (#111 & #161616): Memberikan kesan bioskop gelap yang elegan dan sinematik.
-- Warna Aksen Utama (#FFB6C1 - Soft Pink): Digunakan untuk judul logo, sorotan harga, tombol interaktif utama, badge rating usia, dan garis pembatas penting.
-- Warna Aksen Sekunder (#BEE3F8 - Soft Blue): Digunakan untuk informasi lokasi, tag format studio (IMAX, Dolby Atmos), dan teks bantuan.
-- Tipografi: Menggunakan font modern sans-serif (Inter / Quicksand / Poppins) untuk keterbacaan yang optimal pada layar kecil.
+## 2. Palet Warna & Komponen
+- **Background Utama (`#121212`):** Warna hitam arang sinematik yang memberikan kesan eksklusif dan nyaman di mata.
+- **Warna Aksen / Tombol (`#D4AF37`):** Emas mewah (*Gold*) untuk tombol utama dan sorotan interaktif.
+- **Warna Kartu & Listbox (`#1E1E2D`):** Slate gelap untuk kontras teks putih yang tajam.
+- **Tipografi:** Menggunakan font standar sistem yang bersih dan mudah dibaca (`Segoe UI` / `Arial`).
 
-## 3. Spesifikasi Komponen & Halaman (Berdasarkan Jobdesk)
-1. Halaman Beranda & Katalog (Ita & Repa):
-   - Menampilkan banner selamat datang, daftar film sedang tayang dalam bentuk scroll horizontal/vertikal dengan poster format portrait (object-fit: cover).
-   - Tab informasi tipe studio (IMAX, Premiere, Deluxe, Dolby Atmos).
-2. Halaman Pemilihan Jadwal & Kursi (Ita, Repa, & Viron):
-   - Pemilihan bioskop, tanggal, dan jam tayang.
-   - Denah kursi interaktif dengan legenda warna (Tersedia, Dipilih, Terisi).
-3. Halaman Café & F&B (Apriyanti):
-   - Daftar camilan dengan kartu menu rapi dan pengatur jumlah porsi.
-4. Halaman Checkout & Pembayaran (Shireen):
-   - Ringkasan total biaya transparan (Tiket + F&B + Pajak 10% + Layanan).
-   - Pilihan metode pembayaran dan tombol eksekusi pembayaran.
-5. Halaman E-Ticket Digital (Shireen):
-   - Desain e-voucher tiket dengan kotak kode booking beraksen putus-putus dan simulasi barcode garis.
+## 3. Struktur Tampilan GUI
+1. **Header Banner:** Judul aplikasi beraksen emas dengan latar belakang gelap elegan.
+2. **Katalog Film:** `Listbox` interaktif untuk memilih film yang sedang tayang.
+3. **Input Jumlah & Pembayaran:** Kotak input angka dan `Radiobutton` pilihan pembayaran.
+4. **Tombol Konfirmasi:** Tombol cetak e-ticket berukuran jelas dengan kursor `hand2`.

@@ -1,25 +1,28 @@
-# Bioskop Yuk! (m.tix Cinema 21) - Proyek Final Pemrograman Dasar
-Aplikasi Web Pemesanan Tiket Bioskop Interaktif Berbasis Python & Streamlit
+# Bioskop Yuk! - Proyek Final Pemrograman Dasar (Python GUI Tkinter)
+Aplikasi Pemesanan Tiket Bioskop Interaktif Berbasis Python & Tkinter GUI.
 
 ## Anggota Kelompok & Pembagian Tugas (Jobdesk)
 1. **Ita**
-   - **Tanggung Jawab:** Desain UI/UX & Kerangka Web Interaktif
-   - **Materi Terkait:** Modul Streamlit, Navigasi Alur Sistem (`st.session_state`), Styling Pastel Theme (Soft Pink & Soft Blue).
+   - **Tanggung Jawab:** Desain Antarmuka Utama (UI/UX), Tema Sinematik Elegan, & Kerangka GUI Tkinter.
+   - **Materi Terkait:** Modul Tkinter (`tk.Tk`, `tk.Frame`, `tk.Label`, Styling & Layout Jendela Utama).
+
 2. **Repa**
-   - **Tanggung Jawab:** Manajemen Katalog Film & Database Jadwal Studio
-   - **Materi Terkait:** List of Dictionaries, Tuples, String Formatting, Perulangan data film & jadwal tayang.
+   - **Tanggung Jawab:** Manajemen Katalog Film & Database Jadwal Studio.
+   - **Materi Terkait:** List of Dictionaries (`daftar_film`), Listbox, String Formatting, & Perulangan data film.
+
 3. **Viron**
-   - **Tanggung Jawab:** Sistem Interaktif Denah Kursi Studio
-   - **Materi Terkait:** Perulangan (`for`), List Comprehension (`A1-D6`), Percabangan seleksi kursi & batas minimal booking.
+   - **Tanggung Jawab:** Sistem Interaktif Pemilihan Film & Validasi Pilihan.
+   - **Materi Terkait:** Pengambilan indeks list (`curselection()`), Percabangan (`if-else`), & Validasi minimal pilihan.
+
 4. **Apriyanti**
-   - **Tanggung Jawab:** Logika Perhitungan Biaya, Camilan Café XXI, Pajak & Total
-   - **Materi Terkait:** Tipe data Bilangan (Integer/Float), Operator Aritmatika, Perhitungan Pajak Hiburan 10% & Biaya Layanan.
+   - **Tanggung Jawab:** Logika Perhitungan Biaya, Jumlah Tiket, Pajak & Total Bayar.
+   - **Materi Terkait:** Tipe data Integer (`entry_jumlah`), Operator Aritmatika, Perhitungan Pajak Hiburan 10% & Biaya Layanan.
+
 5. **Shireen**
-   - **Tanggung Jawab:** Checkout Pembayaran, Validasi Eksepsi & Penerbitan E-Ticket Digital
-   - **Materi Terkait:** Seleksi Kondisi (Metode Bayar), Penanganan Error/Validasi (`if-else` / `try-except`), dan Desain E-Ticket Digital.
+   - **Tanggung Jawab:** Metode Pembayaran, Validasi Input & Penerbitan E-Ticket Digital.
+   - **Materi Terkait:** Radiobutton Metode Pembayaran, Penanganan Error (`try-except`), & Kotak Dialog E-Ticket Digital (`messagebox`).
 
 ## Cara Menjalankan Aplikasi:
 ```bash
-pip install streamlit
-py -m streamlit run app_web_xxi.py
+python main.py
 ```
