@@ -1,7 +1,4 @@
-﻿# ==========================================
-# Kode oleh Ita - Kerangka GUI & Desain Antarmuka (UI/UX)
-# ==========================================
-import tkinter as tk
+﻿import tkinter as tk
 from katalog_film import KatalogFilmFrame
 from pemesanan_tiket import PemesananTiketFrame
 

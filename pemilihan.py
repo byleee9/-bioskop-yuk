@@ -1,7 +1,4 @@
-﻿# ==========================================
-# Kode oleh Viron - Pemilihan Film & Validasi
-# ==========================================
-import tkinter as tk
+﻿import tkinter as tk
 from tkinter import messagebox
 
 class PemilihanFilmFrame(tk.Frame):

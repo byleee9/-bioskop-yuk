@@ -1,8 +1,4 @@
-﻿# ==========================================
-# Kode oleh Apriyanti - Perhitungan Biaya, Pajak & Total
-# Kode oleh Shireen - Metode Pembayaran & E-Ticket
-# ==========================================
-import tkinter as tk
+﻿import tkinter as tk
 from tkinter import messagebox
 
 
