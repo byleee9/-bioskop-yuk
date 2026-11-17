@@ -1,4 +1,4 @@
-import tkinter as tk
+﻿import tkinter as tk
 from tkinter import messagebox
 
 class KatalogFilmFrame(tk.Frame):
@@ -6,7 +6,6 @@ class KatalogFilmFrame(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent, bg="#FEF9FA")
 
-        # DATA FILM
         self.film = [
             {
                 "judul": "Avengers: Endgame",
@@ -47,7 +46,6 @@ class KatalogFilmFrame(tk.Frame):
 
     def buat_tampilan(self):
 
-        # HEADER
         header = tk.Frame(self, bg="#1E1D1D")
         header.pack(fill="x")
 
@@ -68,7 +66,6 @@ class KatalogFilmFrame(tk.Frame):
         ).pack(pady=(0, 15))
 
 
-        # JUDUL HALAMAN
         tk.Label(
             self,
             text="Film Yang Sedang Tayang",
@@ -77,7 +74,6 @@ class KatalogFilmFrame(tk.Frame):
             fg="white"
         ).pack(anchor="w", padx=20, pady=15)
 
-        # DAFTAR FILM
         daftar = tk.Frame(self, bg="#282727")
         daftar.pack(fill="both", expand=True, padx=15)
 
@@ -93,7 +89,7 @@ class KatalogFilmFrame(tk.Frame):
 
             tk.Label(
                 card,
-                text="🎬",
+                text="ðŸŽ¬",
                 font=("Segoe UI", 25),
                 bg="#2B2C2D",
                 fg="white"
@@ -137,16 +133,14 @@ class KatalogFilmFrame(tk.Frame):
                 command=lambda f=film: self.detail_film(f)
             ).pack(side="right", padx=8)
 
-        # FOOTER
         tk.Label(
             self,
-            text="© 2026 BIOSKOP YUK | Katalog Film",
+            text="Â© 2026 BIOSKOP YUK | Katalog Film",
             font=("Segoe UI", 9),
             bg="#101827",
             fg="#8795A8"
         ).pack(pady=12)
 
-    # FUNGSI DETAIL FILM
     def detail_film(self, film):
 
         messagebox.showinfo(
@@ -160,7 +154,6 @@ class KatalogFilmFrame(tk.Frame):
         )
 
 
-# MENJALANKAN PROGRAM SECARA MANDIRI
 if __name__ == "__main__":
 
     root = tk.Tk()
