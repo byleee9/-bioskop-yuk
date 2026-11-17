@@ -1,106 +1,87 @@
+﻿# ==========================================
+# Kode oleh Ita - Kerangka GUI & Desain Antarmuka (UI/UX)
+# ==========================================
 import tkinter as tk
-from tkinter import messagebox
-import random
+from katalog_film import KatalogFilmFrame
+from pemesanan_tiket import PemesananTiketFrame
 
-# ==========================================
-# PROGRAM BIOSKOP YUK! - TEMA ELEGAN & SINEMATIK
-# ==========================================
+BG_UTAMA = "#121212"
+BG_KARTU = "#1E1E24"
+WARNA_AKSEN = "#89721F"
+WARNA_MERAH = "#540D10"
+TEKS_UTAMA = "#FFFFFF"
+TEKS_REDUP = "#A0A0A0"
 
-daftar_film = [
-    {"judul": "Avatar 3: Fire & Ash", "genre": "Sci-Fi / IMAX", "harga": 50000},
-    {"judul": "Siksa Kubur: Reborn", "genre": "Horror / Premiere", "harga": 45000},
-    {"judul": "Agak Laen 2: Menyala", "genre": "Comedy / Deluxe", "harga": 40000}
-]
-
-def jalankan_pemesanan():
-    pilihan_index = list_box.curselection()
-    if not pilihan_index:
-        messagebox.showerror("Peringatan", "Silakan pilih salah satu film terlebih dahulu!")
-        return
-    
-    index = pilihan_index[0]
-    film_terpilih = daftar_film[index]
-    
-    try:
-        jumlah_tiket = int(entry_jumlah.get())
-        if jumlah_tiket <= 0:
-            raise ValueError
-    except ValueError:
-        messagebox.showerror("Error", "Jumlah tiket harus berupa angka bulat positif!")
-        return
-
-    subtotal = jumlah_tiket * film_terpilih["harga"]
-    pajak = int(0.10 * subtotal)  # Pajak hiburan 10%
-    biaya_admin = 3000            # Biaya layanan
-    total_bayar = subtotal + pajak + biaya_admin
-
-    kode_booking = f"BYK-{random.randint(100000, 999999)}"
-    metode = pilihan_bayar.get()
-
-    struk = f"""
-====================================
-      🎬 E-TICKET VIP CINEMA 🎬       
-====================================
-Kode Booking : {kode_booking}
-Judul Film   : {film_terpilih['judul']}
-Genre/Studio : {film_terpilih['genre']}
-Jumlah Tiket : {jumlah_tiket} Kursi
-------------------------------------
-Rincian Biaya:
-- Subtotal   : Rp {subtotal:,}
-- Pajak (10%): Rp {pajak:,}
-- Layanan    : Rp {biaya_admin:,}
-====================================
-TOTAL BAYAR  : Rp {total_bayar:,}
-Metode Bayar : {metode}
-Status       : LUNAS ✅
-====================================
-Nikmati pengalaman menonton terbaik!
-"""
-    messagebox.showinfo("Tiket Berhasil Dipesan!", struk)
-
-# ==========================================
-# PEMBUATAN JENDELA UTAMA GUI (ELEGAN THEME)
-# ==========================================
 root = tk.Tk()
-root.title("Bioskop Yuk! - VIP Cinema Edition")
-root.geometry("520x620")
-root.configure(bg="#121212") # Dark Cinematic Background
+root.title("Bioskop Yuk! - Sistem Pemesanan Tiket Bioskop")
+root.geometry("800x600")
+root.configure(bg=BG_UTAMA)
+root.resizable(False, False)
 
-# Judul Header (Gold & Dark)
-lbl_judul = tk.Label(root, text="🎬 BIOSKOP YUK! - VIP CINEMA 🎬", font=("Arial", 16, "bold"), bg="#1A1A24", fg="#D4AF37", pady=12)
-lbl_judul.pack(fill="x")
+frame_header = tk.Frame(root, bg=WARNA_MERAH, pady=15)
+frame_header.pack(fill="x")
 
-# Label Petunjuk
-lbl_info = tk.Label(root, text="Pilih Film Tayang:", font=("Arial", 10, "bold"), bg="#121212", fg="#E0E0E0")
-lbl_info.pack(anchor="w", padx=25, pady=(15, 5))
+label_judul = tk.Label(
+    frame_header,
+    text="ðŸŽ¬ BIOSKOP YUK!",
+    font=("Helvetica", 20, "bold"),
+    bg=WARNA_MERAH,
+    fg=TEKS_UTAMA
+)
+label_judul.pack()
 
-# Listbox untuk Daftar Film
-list_box = tk.Listbox(root, font=("Arial", 10), height=4, bg="#1E1E2D", fg="#FFFFFF", selectbackground="#D4AF37", selectforeground="#121212", bd=0, highlightthickness=1, highlightcolor="#D4AF37")
-list_box.pack(fill="x", padx=25, pady=5)
+label_subjudul = tk.Label(
+    frame_header,
+    text="Nikmati Pengalaman Menonton Terbaik",
+    font=("Helvetica", 10, "italic"),
+    bg=WARNA_MERAH,
+    fg=TEKS_UTAMA
+)
+label_subjudul.pack()
 
-for film in daftar_film:
-    list_box.insert(tk.END, f"  {film['judul']} | {film['genre']} | Rp {film['harga']:,}")
+frame_konten = tk.Frame(root, bg=BG_UTAMA, padx=20, pady=20)
+frame_konten.pack(fill="both", expand=True)
 
-# Input Jumlah Tiket
-lbl_jml = tk.Label(root, text="Jumlah Tiket:", font=("Arial", 10, "bold"), bg="#121212", fg="#E0E0E0")
-lbl_jml.pack(anchor="w", padx=25, pady=(15, 5))
+frame_kiri = tk.Frame(frame_konten, bg=BG_KARTU, padx=5, pady=5, bd=1, relief="ridge")
+frame_kiri.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
-entry_jumlah = tk.Entry(root, font=("Arial", 11), width=10, bg="#1E1E2D", fg="#FFFFFF", insertbackground="white", bd=0, relief="solid")
-entry_jumlah.pack(anchor="w", padx=25, pady=5)
-entry_jumlah.insert(0, "1")
+label_section_film = tk.Label(
+    frame_kiri,
+    text="DAFTAR FILM & JADWAL",
+    font=("Helvetica", 12, "bold"),
+    bg=BG_KARTU,
+    fg=WARNA_AKSEN
+)
+label_section_film.pack(anchor="w", pady=(0, 10))
 
-# Pilihan Metode Pembayaran
-lbl_bayar = tk.Label(root, text="Metode Pembayaran:", font=("Arial", 10, "bold"), bg="#121212", fg="#E0E0E0")
-lbl_bayar.pack(anchor="w", padx=25, pady=(15, 5))
+katalog_film = KatalogFilmFrame(frame_kiri)
+katalog_film.pack(fill="both", expand=True)
 
-pilihan_bayar = tk.StringVar(value="QRIS VIP")
-tk.Radiobutton(root, text="QRIS (Instant Payment)", variable=pilihan_bayar, value="QRIS VIP", bg="#121212", fg="#CCCCCC", selectcolor="#1E1E2D", activebackground="#121212", activeforeground="#FFFFFF", font=("Arial", 9)).pack(anchor="w", padx=35)
-tk.Radiobutton(root, text="Transfer Bank (BCA / Mandiri / BNI)", variable=pilihan_bayar, value="Transfer Bank", bg="#121212", fg="#CCCCCC", selectcolor="#1E1E2D", activebackground="#121212", activeforeground="#FFFFFF", font=("Arial", 9)).pack(anchor="w", padx=35)
-tk.Radiobutton(root, text="Cash / Tunai di Ticket Box", variable=pilihan_bayar, value="Tunai", bg="#121212", fg="#CCCCCC", selectcolor="#1E1E2D", activebackground="#121212", activeforeground="#FFFFFF", font=("Arial", 9)).pack(anchor="w", padx=35)
+frame_kanan = tk.Frame(frame_konten, bg=BG_KARTU, padx=15, pady=15, bd=1, relief="ridge")
+frame_kanan.pack(side="right", fill="both", expand=True, padx=(10, 0))
 
-# Tombol Eksekusi (Gold Button)
-btn_pesan = tk.Button(root, text="🎟️ Cetak E-Ticket VIP Sekarang", font=("Arial", 11, "bold"), bg="#D4AF37", fg="#121212", activebackground="#C59B27", activeforeground="#121212", command=jalankan_pemesanan, padx=15, pady=10, bd=0, cursor="hand2")
-btn_pesan.pack(pady=25)
+label_section_pesan = tk.Label(
+    frame_kanan,
+    text="PEMESANAN TIKET",
+    font=("Helvetica", 12, "bold"),
+    bg=BG_KARTU,
+    fg=WARNA_AKSEN
+)
+label_section_pesan.pack(anchor="w", pady=(0, 10))
+
+pemesanan_tiket = PemesananTiketFrame(frame_kanan)
+pemesanan_tiket.pack(fill="both", expand=True)
+
+frame_footer = tk.Frame(root, bg=BG_KARTU, pady=10)
+frame_footer.pack(fill="x", side="bottom")
+
+label_footer = tk.Label(
+    frame_footer,
+    text="Â© 2026 Bioskop Yuk!",
+    font=("Helvetica", 9),
+    bg=BG_KARTU,
+    fg=TEKS_REDUP
+)
+label_footer.pack()
 
 root.mainloop()
