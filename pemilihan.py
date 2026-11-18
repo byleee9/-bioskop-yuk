@@ -26,11 +26,6 @@ def buat_denah(terisi=()):
         denah.append(isi_baris)
     return denah
 
-
-# ==========================================
-# DATA FILM (sumber data tunggal, dipakai katalog & pemilihan)
-# Setiap film punya denah kursi sendiri di "denah".
-# ==========================================
 def buat_daftar_film():
     return [
         {
