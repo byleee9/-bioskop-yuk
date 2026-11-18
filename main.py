@@ -1,112 +1,84 @@
-﻿import tkinter as tk
-from tkinter import messagebox
+import tkinter as tk
+from katalog_film import KatalogFilmFrame
+from pemesanan_tiket import PemesananTiketFrame
 
-class AplikasiBioskopIta:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Bioskop Yuk - Sistem Pemesanan Tiket")
-        self.root.geometry("700x550")
-        self.root.configure(bg="#FFF0F5") # LavenderBlush / Soft Pastel Pink
+BG_UTAMA = "#121212"
+BG_KARTU = "#1E1E24"
+WARNA_AKSEN = "#89721F"
+WARNA_MERAH = "#540D10"
+TEKS_UTAMA = "#FFFFFF"
+TEKS_REDUP = "#A0A0A0"
 
-        self.nama_aplikasi = "BIOSKOP YUK"
-        self.versi = "1.0"
-        self.pembuat = "Ita"
+root = tk.Tk()
+root.title("Bioskop Yuk! - Sistem Pemesanan Tiket Bioskop")
+root.geometry("800x600")
+root.configure(bg=BG_UTAMA)
+root.resizable(False, False)
 
-        header_frame = tk.Frame(root, bg="#FFB6C1", height=80)
-        header_frame.pack(fill="x", padx=0, pady=0)
-        header_frame.pack_propagate(False)
+frame_header = tk.Frame(root, bg=WARNA_MERAH, pady=15)
+frame_header.pack(fill="x")
 
-        lbl_judul = tk.Label(
-            header_frame, 
-            text=f"ðŸŽ¬  {self.nama_aplikasi}  ðŸŽ¬", 
-            font=("Segoe UI", 20, "bold"), 
-            bg="#FFB6C1", 
-            fg="#FFFFFF"
-        )
-        lbl_judul.pack(expand=True)
+label_judul = tk.Label(
+    frame_header,
+    text="ðŸŽ¬ BIOSKOP YUK!",
+    font=("Helvetica", 20, "bold"),
+    bg=WARNA_MERAH,
+    fg=TEKS_UTAMA
+)
+label_judul.pack()
 
-        sub_frame = tk.Frame(root, bg="#FFF0F5")
-        sub_frame.pack(fill="x", padx=20, pady=10)
+label_subjudul = tk.Label(
+    frame_header,
+    text="Nikmati Pengalaman Menonton Terbaik",
+    font=("Helvetica", 10, "italic"),
+    bg=WARNA_MERAH,
+    fg=TEKS_UTAMA
+)
+label_subjudul.pack()
 
-        lbl_info = tk.Label(
-            sub_frame, 
-            text=f"Modul Utama GUI & Kerangka Program | Dibuat oleh: {self.pembuat}", 
-            font=("Segoe UI", 10, "italic"), 
-            bg="#FFF0F5", 
-            fg="#8B4513"
-        )
-        lbl_info.pack(anchor="w")
+frame_konten = tk.Frame(root, bg=BG_UTAMA, padx=20, pady=20)
+frame_konten.pack(fill="both", expand=True)
 
-        card_frame = tk.Frame(root, bg="#FFFFFF", bd=1, relief="solid")
-        card_frame.pack(fill="both", expand=True, padx=20, pady=10)
+frame_kiri = tk.Frame(frame_konten, bg=BG_KARTU, padx=5, pady=5, bd=1, relief="ridge")
+frame_kiri.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
-        lbl_card_title = tk.Label(
-            card_frame, 
-            text="âœ¨ Selamat Datang di Panel Utama Bioskop Yuk âœ¨", 
-            font=("Segoe UI", 14, "bold"), 
-            bg="#FFFFFF", 
-            fg="#C71585"
-        )
-        lbl_card_title.pack(pady=20)
+label_section_film = tk.Label(
+    frame_kiri,
+    text="DAFTAR FILM & JADWAL",
+    font=("Helvetica", 12, "bold"),
+    bg=BG_KARTU,
+    fg=WARNA_AKSEN
+)
+label_section_film.pack(anchor="w", pady=(0, 10))
 
-        lbl_deskripsi = tk.Label(
-            card_frame, 
-            text="Ini adalah kerangka utama tampilan grafis (GUI) aplikasi.\nDirancang bersih, elegan, dan siap dikembangkan lebih lanjut.", 
-            font=("Segoe UI", 11), 
-            bg="#FFFFFF", 
-            fg="#555555",
-            justify="center"
-        )
-        lbl_deskripsi.pack(pady=10)
+katalog_film = KatalogFilmFrame(frame_kiri)
+katalog_film.pack(fill="both", expand=True)
 
-        btn_frame = tk.Frame(card_frame, bg="#FFFFFF")
-        btn_frame.pack(pady=25)
+frame_kanan = tk.Frame(frame_konten, bg=BG_KARTU, padx=15, pady=15, bd=1, relief="ridge")
+frame_kanan.pack(side="right", fill="both", expand=True, padx=(10, 0))
 
-        btn_info = tk.Button(
-            btn_frame, 
-            text="â„¹ï¸ Info Aplikasi", 
-            command=self.tampilkan_pesan, 
-            bg="#FF69B4", 
-            fg="#FFFFFF", 
-            font=("Segoe UI", 10, "bold"),
-            relief="flat",
-            padx=15,
-            pady=8,
-            cursor="hand2"
-        )
-        btn_info.grid(row=0, column=0, padx=10)
+label_section_pesan = tk.Label(
+    frame_kanan,
+    text="PEMESANAN TIKET",
+    font=("Helvetica", 12, "bold"),
+    bg=BG_KARTU,
+    fg=WARNA_AKSEN
+)
+label_section_pesan.pack(anchor="w", pady=(0, 10))
 
-        btn_keluar = tk.Button(
-            btn_frame, 
-            text="âŒ Keluar", 
-            command=root.quit, 
-            bg="#DB7093", 
-            fg="#FFFFFF", 
-            font=("Segoe UI", 10, "bold"),
-            relief="flat",
-            padx=15,
-            pady=8,
-            cursor="hand2"
-        )
-        btn_keluar.grid(row=0, column=1, padx=10)
+pemesanan_tiket = PemesananTiketFrame(frame_kanan)
+pemesanan_tiket.pack(fill="both", expand=True)
 
-        footer_frame = tk.Frame(root, bg="#FFC0CB", height=30)
-        footer_frame.pack(fill="x", side="bottom")
-        footer_frame.pack_propagate(False)
+frame_footer = tk.Frame(root, bg=BG_KARTU, pady=10)
+frame_footer.pack(fill="x", side="bottom")
 
-        lbl_footer = tk.Label(
-            footer_frame, 
-            text=f"Â© 2026 - {self.nama_aplikasi} v{self.versi}", 
-            font=("Segoe UI", 8), 
-            bg="#FFC0CB", 
-            fg="#FFFFFF"
-        )
-        lbl_footer.pack(expand=True)
+label_footer = tk.Label(
+    frame_footer,
+    text="Â© 2026 Bioskop Yuk!",
+    font=("Helvetica", 9),
+    bg=BG_KARTU,
+    fg=TEKS_REDUP
+)
+label_footer.pack()
 
-    def tampilkan_pesan(self):
-        messagebox.showinfo("Informasi Aplikasi", f"Aplikasi {self.nama_aplikasi} v{self.versi}\nModul Kerangka GUI Utama oleh {self.pembuat}.\nSemua komponen siap digunakan!")
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = AplikasiBioskopIta(root)
-    root.mainloop()
+root.mainloop()
