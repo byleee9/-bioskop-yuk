@@ -46,25 +46,6 @@ class KatalogFilmFrame(tk.Frame):
 
     def buat_tampilan(self):
 
-        header = tk.Frame(self, bg="#1E1D1D")
-        header.pack(fill="x")
-
-        tk.Label(
-            header,
-            text="BIOSKOP YUK",
-            font=("Segoe UI", 23, "bold"),
-            bg="#303031",
-            fg="white"
-        ).pack(pady=(15, 3))
-
-        tk.Label(
-            header,
-            text="KATALOG FILM & JADWAL TAYANG",
-            font=("Segoe UI", 11),
-            bg="#2B2B2C",
-            fg="#F5B942"
-        ).pack(pady=(0, 15))
-
 
         tk.Label(
             self,
