@@ -10,9 +10,10 @@
 2. **Repa — Manajemen Katalog Film & Database Jadwal**
    - Menyusun struktur data `List of Dictionaries` (`daftar_film`) berisi judul, genre, dan harga tiket.
    - Mengisi komponen `Listbox` agar menampilkan daftar film secara rapi dan dinamis.
-3. **Viron — Sistem Interaktif Pemilihan Film & Validasi**
+3. **Viron — Sistem Interaktif Pemilihan Film, Validasi & Denah Kursi**
    - Menangani fungsi klik pada `Listbox` (`curselection()`) untuk mendeteksi film yang dipilih pengguna.
    - Menerapkan percabangan (`if-else`) untuk memastikan pengguna sudah memilih film sebelum melanjutkan transaksi.
+   - Menyusun denah kursi studio (`A1-D6`) menggunakan List 2 Dimensi dengan perulangan bersarang, kursi yang sudah terisi ditandai dan tidak dapat dipilih ulang.
 4. **Apriyanti — Logika Perhitungan Biaya, Pajak & Total**
    - Mengelola input jumlah tiket dengan tipe data Integer.
    - Menerapkan operator aritmatika dasar untuk menghitung subtotal, **Pajak Hiburan 10%**, biaya layanan, dan total pembayaran keseluruhan.

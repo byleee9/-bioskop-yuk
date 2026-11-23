@@ -11,8 +11,8 @@ Aplikasi Pemesanan Tiket Bioskop Interaktif Berbasis Python & Tkinter GUI.
    - **Materi Terkait:** List of Dictionaries (`daftar_film`), Listbox, String Formatting, & Perulangan data film.
 
 3. **Viron**
-   - **Tanggung Jawab:** Sistem Interaktif Pemilihan Film & Validasi Pilihan.
-   - **Materi Terkait:** Pengambilan indeks list (`curselection()`), Percabangan (`if-else`), & Validasi minimal pilihan.
+   - **Tanggung Jawab:** Sistem Interaktif Pemilihan Film, Validasi Pilihan, & Denah Kursi Studio.
+   - **Materi Terkait:** Pengambilan indeks list (`curselection()`), Percabangan (`if-else`), Validasi minimal pilihan, & List 2 Dimensi denah kursi (`A1-D6`) dengan perulangan bersarang.
 
 4. **Apriyanti**
    - **Tanggung Jawab:** Logika Perhitungan Biaya, Jumlah Tiket, Pajak & Total Bayar.

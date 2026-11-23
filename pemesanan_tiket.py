@@ -2,9 +2,9 @@
 from tkinter import messagebox
 
 
-HARGA_TIKET = 75000        # Harga tiket bioskop
-PAJAK = 0.10               # Pajak hiburan 10%
-BIAYA_LAYANAN = 5000       # Biaya layanan per transaksi
+HARGA_TIKET = 75000        
+PAJAK = 0.10               
+BIAYA_LAYANAN = 5000       
 
 
 def hitung_total(jumlah_tiket):
@@ -78,7 +78,7 @@ class PemesananTiketFrame(tk.Frame):
 
         tk.Button(
             self,
-            text="ðŸ’³ Bayar & Terbitkan E-Ticket",
+            text=" Bayar & Terbitkan E-Ticket",
             command=self.proses_pembayaran,
             bg="#28a745",
             fg="#FFFFFF",
