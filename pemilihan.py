@@ -1,9 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
 
+from data_film import data_film
+
 BG_UTAMA = "#121212"
-BG_KARTU = "#1E1E24"
-WARNA_AKSEN = "#89721F"
+BG_KARTU = "#1E1E2D"
+WARNA_AKSEN = "#D4AF37"
 WARNA_MERAH = "#540D10"
 TEKS_UTAMA = "#FFFFFF"
 TEKS_REDUP = "#A0A0A0"
@@ -27,44 +29,20 @@ def buat_denah(terisi=()):
     return denah
 
 def buat_daftar_film():
-    return [
-        {
-            "judul": "Avengers: Endgame",
-            "genre": " Action / Adventure",
-            "durasi": "181 Menit",
-            "sinopsis": "para Avengers berjuang menyelamatkan alam semesta.",
-            "jadwal": "10:00 | 13:00 | 16:00",
-            "studio": "Studio 1",
-            "denah": buat_denah(["A2", "B3", "C4"])
-        },
-        {
-            "judul": "3726 mdpl",
-            "genre": "Romance / drama",
-            "durasi": "200 Menit",
-            "sinopsis": "kisah cinta Rangga Raja(Abun Sungkar), mahasiswa kehutanan yang hobi mendaki gunung dengan adik tingkatnya yang berprestasi Andini Hangura(Callista Arum).",
-            "jadwal": "11:00 | 14:00 | 19:00",
-            "studio": "Studio 2",
-            "denah": buat_denah(["A1", "A2", "D5", "D6"])
-        },
-        {
-            "judul": "The Conjuring",
-            "genre": "Horor / mystery",
-            "durasi": "112 menit",
-            "sinopsis": "Kisah penyelidikan kejadian misterius.",
-            "jadwal": "12:00 | 15:00 | 20:00",
-            "studio": "Studio 3",
-            "denah": buat_denah(["B2", "B3", "C3", "C4"])
-        },
-        {
-            "judul": "Coco",
-            "genre": "Animation / Family",
-            "durasi": "105 menit",
-            "sinopsis": "pertualangan seorang anak dalam dunia musik.",
-            "jadwal": "09:00 | 12:00 | 17:00",
-            "studio": "Studio 4",
-            "denah": buat_denah(["D1", "D2"])
-        }
-    ]
+    """Membangun daftar film dari data_film.py dan menambahkan denah kursi."""
+    denah_terisi = {
+        "Avengers: Endgame": ["A2", "B3", "C4"],
+        "3726 mdpl": ["A1", "A2", "D5", "D6"],
+        "The Conjuring": ["B2", "B3", "C3", "C4"],
+        "Coco": ["A3", "B4"],
+    }
+    daftar = []
+    for film in data_film:
+        item = dict(film)
+        item["jadwal"] = " | ".join(film["jadwal"])
+        item["denah"] = buat_denah(denah_terisi.get(film["judul"], []))
+        daftar.append(item)
+    return daftar
 
 
 class PemilihanFrame(tk.Frame):
