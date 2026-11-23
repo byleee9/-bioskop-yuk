@@ -1,21 +1,20 @@
 ﻿import tkinter as tk
 from tkinter import messagebox
 
+HARGA_TIKET = 75000
+PAJAK = 0.10
+BIAYA_LAYANAN = 5000
 
-HARGA_TIKET = 75000        
-PAJAK = 0.10               
-BIAYA_LAYANAN = 5000       
 
-
-def hitung_total(jumlah_tiket):
+def hitung_total(jumlah_tiket, harga_satuan=HARGA_TIKET):
     """Fungsi logika perhitungan harga milik Apriyanti.
-    Menerima jumlah tiket, mengembalikan rincian pembayaran (dict)."""
-    subtotal = HARGA_TIKET * jumlah_tiket
+    Menerima jumlah tiket dan harga satuan, mengembalikan rincian pembayaran."""
+    subtotal = harga_satuan * jumlah_tiket
     total_pajak = subtotal * PAJAK
     total_bayar = subtotal + total_pajak + BIAYA_LAYANAN
 
     return {
-        "harga_satuan": HARGA_TIKET,
+        "harga_satuan": harga_satuan,
         "jumlah": jumlah_tiket,
         "subtotal": subtotal,
         "pajak": total_pajak,
@@ -27,21 +26,40 @@ def hitung_total(jumlah_tiket):
 class PemesananTiketFrame(tk.Frame):
 
     def __init__(self, parent):
-        super().__init__(parent, bg="#1E1E24")
+        super().__init__(parent, bg="#1E1E2D")
 
-        tk.Label(
+        self.film_terpilih = None
+        self.kursi_terpilih = []
+
+        self.lbl_film = tk.Label(
             self,
-            text="Form Pemesanan",
-            font=("Segoe UI", 11, "bold"),
-            bg="#1E1E24",
-            fg="#F5C518"
-        ).pack(anchor="w", pady=(0, 10))
+            text="Film: belum ada film dipilih",
+            font=("Segoe UI", 10, "bold"),
+            bg="#1E1E2D",
+            fg="#F5C518",
+            wraplength=330,
+            justify="left",
+            anchor="w"
+        )
+        self.lbl_film.pack(anchor="w", pady=(0, 4))
+
+        self.lbl_kursi = tk.Label(
+            self,
+            text="Kursi: -",
+            font=("Segoe UI", 10),
+            bg="#1E1E2D",
+            fg="#A0A0A0",
+            wraplength=330,
+            justify="left",
+            anchor="w"
+        )
+        self.lbl_kursi.pack(anchor="w", pady=(0, 10))
 
         tk.Label(
             self,
             text="Jumlah Tiket:",
             font=("Segoe UI", 10, "bold"),
-            bg="#1E1E24",
+            bg="#1E1E2D",
             fg="#FFFFFF"
         ).pack(anchor="w")
 
@@ -52,7 +70,7 @@ class PemesananTiketFrame(tk.Frame):
             self,
             text="Metode Pembayaran:",
             font=("Segoe UI", 10, "bold"),
-            bg="#1E1E24",
+            bg="#1E1E2D",
             fg="#FFFFFF"
         ).pack(anchor="w")
 
@@ -70,15 +88,15 @@ class PemesananTiketFrame(tk.Frame):
                 variable=self.var_metode,
                 value=opsi,
                 font=("Segoe UI", 9),
-                bg="#1E1E24",
+                bg="#1E1E2D",
                 fg="#A0A0A0",
-                selectcolor="#1E1E24",
-                activebackground="#1E1E24"
+                selectcolor="#1E1E2D",
+                activebackground="#1E1E2D"
             ).pack(anchor="w", pady=1)
 
         tk.Button(
             self,
-            text=" Bayar & Terbitkan E-Ticket",
+            text="Bayar & Terbitkan E-Ticket",
             command=self.proses_pembayaran,
             bg="#28a745",
             fg="#FFFFFF",
@@ -87,6 +105,23 @@ class PemesananTiketFrame(tk.Frame):
             cursor="hand2",
             pady=6
         ).pack(fill="x", pady=(20, 0))
+
+    def set_pilihan(self, film, kursi):
+        """Dipanggil dari halaman pemilihan film dan kursi."""
+        self.film_terpilih = film
+        self.kursi_terpilih = list(kursi)
+
+        self.lbl_film.config(text=f'Film: {film["judul"]}')
+        if kursi:
+            self.lbl_kursi.config(
+                text="Kursi: " + ", ".join(kursi) +
+                f'  ({film["studio"]} | {film["jadwal"]})'
+            )
+        else:
+            self.lbl_kursi.config(text=f'Studio: {film["studio"]} | {film["jadwal"]}')
+
+        self.entry_jumlah.delete(0, tk.END)
+        self.entry_jumlah.insert(0, str(max(1, len(kursi))))
 
     def proses_pembayaran(self):
         try:
@@ -106,6 +141,13 @@ class PemesananTiketFrame(tk.Frame):
             )
             return
 
+        if self.film_terpilih is None:
+            messagebox.showwarning(
+                "Peringatan",
+                "Silakan pilih film dan kursi terlebih dahulu pada halaman Pemilihan Film!"
+            )
+            return
+
         metode = self.var_metode.get()
         if not metode:
             messagebox.showwarning(
@@ -114,12 +156,19 @@ class PemesananTiketFrame(tk.Frame):
             )
             return
 
-        rincian = hitung_total(jumlah_tiket)
+        rincian = hitung_total(jumlah_tiket, self.film_terpilih["harga"])
+
+        info_kursi = ", ".join(self.kursi_terpilih) if self.kursi_terpilih else "-"
 
         struk_eticket = (
             "====================================\n"
             "           E-TICKET DIGITAL         \n"
             "====================================\n"
+            f"Film              : {self.film_terpilih['judul']}\n"
+            f"Studio            : {self.film_terpilih['studio']}\n"
+            f"Jadwal            : {self.film_terpilih['jadwal']}\n"
+            f"Kursi             : {info_kursi}\n"
+            f"------------------------------------\n"
             f"Harga Tiket       : Rp {rincian['harga_satuan']:,}\n"
             f"Jumlah Tiket      : {rincian['jumlah']} Tiket\n"
             f"Subtotal          : Rp {rincian['subtotal']:,}\n"
@@ -140,7 +189,7 @@ class PemesananTiketFrame(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Bioskop Yuk - Pemesanan Tiket")
-    root.geometry("360x420")
+    root.geometry("360x460")
     root.configure(bg="#121212")
 
     aplikasi = PemesananTiketFrame(root)

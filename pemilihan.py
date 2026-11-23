@@ -1,263 +1,290 @@
-﻿import tkinter as tk
+import tkinter as tk
 from tkinter import messagebox
 
-class PemilihanFilmFrame(tk.Frame):
+from data_film import data_film
 
-    def __init__(self, parent):
-        super().__init__(parent, bg="#282727")
+BG_UTAMA = "#121212"
+BG_KARTU = "#1E1E2D"
+WARNA_AKSEN = "#D4AF37"
+WARNA_MERAH = "#540D10"
+TEKS_UTAMA = "#FFFFFF"
+TEKS_REDUP = "#A0A0A0"
 
-        self.film = [
-            {
-                "judul": "Avengers: Endgame",
-                "genre": " Action / Adventure",
-                "durasi": "181 Menit",
-                "sinopsis": "para Avengers berjuang menyelamatkan alam semesta.",
-                "jadwal": "10:00 | 13:00 | 16:00",
-                "studio": "Studio 1"
-            },
-            {
-                "judul": "3726 mdpl",
-                "genre": "Romance / drama",
-                "durasi": "200 Menit",
-                "sinopsis": "kisah cinta Rangga Raja(Abun Sungkar), mahasiswa kehutanan yang hobi mendaki gunung dengan adik tingkatnya yang berprestasi Andini Hangura(Callista Arum).",
-                "jadwal": "11:00 | 14:00 | 19:00",
-                "studio": "Studio 2"
-            },
-            {
-                "judul": "The Conjuring",
-                "genre": "Horor / mystery",
-                "durasi": "112 menit",
-                "sinopsis": "Kisah penyelidikan kejadian misterius.",
-                "jadwal": "12:00 | 15:00 | 20:00",
-                "studio": "Studio 3"
-            },
-            {
-                "judul": "Coco",
-                "genre": "Animation / Family",
-                "durasi": "105 menit",
-                "sinopsis": "pertualangan seorang anak dalam dunia musik.",
-                "jadwal": "09:00 | 12:00 | 17:00",
-                "studio": "Studio 4"
-            }
-        ]
+KURSI_KOSONG = "#2F6B3F"
+KURSI_DIPILIH = WARNA_AKSEN
+KURSI_TERISI = "#3A3A42"
 
-        self.film_terpilih = None
+
+def buat_denah(terisi=()):
+    """Buat denah 4x6 (list 2 dimensi / matriks), kursi di 'terisi' ditandai "X".
+    Contoh: buat_denah(["A2", "B3"])"""
+    baris = ["A", "B", "C", "D"]
+    denah = []
+    for i in range(4):
+        isi_baris = []
+        for j in range(6):
+            kode = f"{baris[i]}{j + 1}"
+            isi_baris.append("X" if kode in terisi else "O")
+        denah.append(isi_baris)
+    return denah
+
+def buat_daftar_film():
+    """Membangun daftar film dari data_film.py dan menambahkan denah kursi."""
+    denah_terisi = {
+        "Avengers: Endgame": ["A2", "B3", "C4"],
+        "3726 mdpl": ["A1", "A2", "D5", "D6"],
+        "The Conjuring": ["B2", "B3", "C3", "C4"],
+        "Coco": ["A3", "B4"],
+    }
+    daftar = []
+    for film in data_film:
+        item = dict(film)
+        item["jadwal"] = " | ".join(film["jadwal"])
+        item["denah"] = buat_denah(denah_terisi.get(film["judul"], []))
+        daftar.append(item)
+    return daftar
+
+
+class PemilihanFrame(tk.Frame):
+    """Pemilihan film + denah kursi A1-D6.
+
+    Isi matriks denah:  "O" = kosong,  "X" = sudah dibeli
+    Setiap film punya denah sendiri di film["denah"].
+    """
+
+    BARIS = ["A", "B", "C", "D"]
+    KOLOM = 6
+
+    def __init__(self, parent, daftar_film, film_awal=None, on_konfirmasi=None):
+        super().__init__(parent, bg=BG_UTAMA)
+
+        self.daftar_film = daftar_film
+        for f in self.daftar_film:
+            f.setdefault("denah", buat_denah())
+
+        self.on_konfirmasi = on_konfirmasi
+
+        self.film = film_awal if film_awal is not None else daftar_film[0]
+        self.var_film = tk.IntVar(value=self.daftar_film.index(self.film))
+
+        self.terpilih = []     
+        self.tombol = {}      
 
         self.buat_tampilan()
 
     def buat_tampilan(self):
-
-        header = tk.Frame(self, bg="#1E1D1D")
-        header.pack(fill="x")
+        tk.Label(
+            self, text="PILIH FILM & KURSI", font=("Helvetica", 15, "bold"),
+            bg=BG_UTAMA, fg=WARNA_AKSEN
+        ).pack(pady=(12, 4))
 
         tk.Label(
-            header,
-            text="BIOSKOP YUK",
-            font=("Segoe UI", 23, "bold"),
-            bg="#1E1D1D",
-            fg="white"
-        ).pack(pady=(15, 3))
+            self, text="1. Pilih Film", font=("Helvetica", 9, "bold"),
+            bg=BG_UTAMA, fg=TEKS_REDUP
+        ).pack(anchor="w", padx=20)
 
-        tk.Label(
-            header,
-            text="PEMILIHAN FILM & VALIDASI PILIHAN",
-            font=("Segoe UI", 11),
-            bg="#1E1D1D",
-            fg="#F5B942"
-        ).pack(pady=(0, 15))
+        frame_film = tk.Frame(self, bg=BG_UTAMA)
+        frame_film.pack(padx=20, pady=4, anchor="w")
 
-        tk.Label(
-            self,
-            text="Silakan Pilih Film",
-            font=("Segoe UI", 17, "bold"),
-            bg="#282727",
-            fg="white"
-        ).pack(anchor="w", padx=20, pady=(15, 5))
+        for idx in range(len(self.daftar_film)):
+            tk.Radiobutton(
+                frame_film,
+                text=self.daftar_film[idx]["judul"],
+                variable=self.var_film, value=idx,
+                command=self.ganti_film,
+                indicatoron=0,                     
+                font=("Helvetica", 9, "bold"),
+                bg=BG_KARTU, fg=TEKS_UTAMA,
+                selectcolor=WARNA_AKSEN,
+                activebackground=WARNA_AKSEN, activeforeground=TEKS_UTAMA,
+                relief="flat", padx=10, pady=5, cursor="hand2"
+            ).grid(row=idx // 4, column=idx % 4, padx=3, pady=3)
 
-        tk.Label(
-            self,
-            text="Klik salah satu film pada daftar, lalu tekan tombol Pilih Film.",
-            font=("Segoe UI", 10),
-            bg="#282727",
-            fg="#B8C7DC"
-        ).pack(anchor="w", padx=20, pady=(0, 10))
+        kartu = tk.Frame(self, bg=BG_KARTU, padx=12, pady=8)
+        kartu.pack(fill="x", padx=20, pady=(4, 0))
 
-        area = tk.Frame(self, bg="#282727")
-        area.pack(fill="both", expand=True, padx=15)
-
-        kiri = tk.Frame(area, bg="#B1B2B5", padx=12, pady=10)
-        kiri.pack(side="left", fill="y", padx=(0, 10))
-
-        tk.Label(
-            kiri,
-            text="Daftar Film",
-            font=("Segoe UI", 12, "bold"),
-            bg="#B1B2B5",
-            fg="#17243A"
-        ).pack(anchor="w", pady=(0, 6))
-
-        self.listbox = tk.Listbox(
-            kiri,
-            font=("Segoe UI", 11),
-            width=24,
-            height=8,
-            bg="#303031",
-            fg="white",
-            selectbackground="#F5B942",
-            selectforeground="#17243A",
-            selectmode=tk.SINGLE,
-            exportselection=False,
-            activestyle="none",
-            relief="flat"
+        self.lbl_judul = tk.Label(
+            kartu, font=("Helvetica", 11, "bold"), bg=BG_KARTU, fg=TEKS_UTAMA,
+            anchor="w", justify="left"
         )
-        self.listbox.pack()
+        self.lbl_judul.pack(fill="x")
 
-        for f in self.film:
-            self.listbox.insert(tk.END, f["judul"])
+        self.lbl_meta = tk.Label(
+            kartu, font=("Helvetica", 9), bg=BG_KARTU, fg=TEKS_REDUP,
+            anchor="w", justify="left"
+        )
+        self.lbl_meta.pack(fill="x")
 
-        self.listbox.bind("<<ListboxSelect>>", self.tampilkan_detail)
+        self.lbl_jadwal = tk.Label(
+            kartu, font=("Helvetica", 9, "bold"), bg=BG_KARTU, fg=WARNA_AKSEN,
+            anchor="w", justify="left"
+        )
+        self.lbl_jadwal.pack(fill="x", pady=(2, 0))
 
-        kanan = tk.Frame(area, bg="#243249", padx=12, pady=10)
-        kanan.pack(side="left", fill="both", expand=True)
+        self.lbl_sinopsis = tk.Label(
+            kartu, font=("Helvetica", 9), bg=BG_KARTU, fg=TEKS_UTAMA,
+            anchor="w", justify="left", wraplength=540
+        )
+        self.lbl_sinopsis.pack(fill="x", pady=(2, 0))
 
         tk.Label(
-            kanan,
-            text="Detail Film",
-            font=("Segoe UI", 12, "bold"),
-            bg="#243249",
-            fg="#F5B942"
-        ).pack(anchor="w", pady=(0, 6))
+            self, text="2. Pilih Kursi", font=("Helvetica", 9, "bold"),
+            bg=BG_UTAMA, fg=TEKS_REDUP
+        ).pack(anchor="w", padx=20, pady=(10, 0))
 
-        self.lbl_detail = tk.Label(
-            kanan,
-            text="Belum ada film yang dipilih.",
-            font=("Segoe UI", 10),
-            bg="#243249",
-            fg="#B8C7DC",
-            justify="left",
-            anchor="nw",
-            wraplength=380
+        tk.Label(
+            self, text="LAYAR", font=("Helvetica", 9, "bold"),
+            bg=BG_KARTU, fg=TEKS_REDUP, width=44
+        ).pack(pady=8)
+
+        grid = tk.Frame(self, bg=BG_UTAMA)
+        grid.pack(pady=4)
+
+        for i in range(len(self.BARIS)):
+            tk.Label(
+                grid, text=self.BARIS[i], font=("Helvetica", 10, "bold"),
+                bg=BG_UTAMA, fg=TEKS_UTAMA
+            ).grid(row=i, column=0, padx=8)
+
+            for j in range(self.KOLOM):
+                kode = f"{self.BARIS[i]}{j + 1}"      
+                btn = tk.Button(
+                    grid, width=5, height=1,
+                    font=("Helvetica", 9, "bold"), relief="flat", cursor="hand2",
+                    command=lambda k=kode, r=i, c=j: self.klik_kursi(k, r, c)
+                )
+                btn.grid(row=i, column=j + 1, padx=4, pady=3)
+                self.tombol[kode] = btn
+
+        legenda = tk.Frame(self, bg=BG_UTAMA)
+        legenda.pack(pady=6)
+        for teks, warna in [("Kosong", KURSI_KOSONG), ("Dipilih", KURSI_DIPILIH),
+                            ("Terisi (X)", KURSI_TERISI)]:
+            tk.Label(legenda, text="   ", bg=warna).pack(side="left", padx=(10, 3))
+            tk.Label(legenda, text=teks, bg=BG_UTAMA, fg=TEKS_REDUP,
+                     font=("Helvetica", 9)).pack(side="left")
+
+        self.lbl_info = tk.Label(
+            self, text="Kursi dipilih: -", font=("Helvetica", 10),
+            bg=BG_UTAMA, fg=TEKS_UTAMA
         )
-        self.lbl_detail.pack(fill="both", expand=True)
+        self.lbl_info.pack(pady=4)
 
-        tombol = tk.Frame(self, bg="#282727")
-        tombol.pack(pady=15)
+        aksi = tk.Frame(self, bg=BG_UTAMA)
+        aksi.pack(pady=6)
 
         tk.Button(
-            tombol,
-            text="Pilih Film",
-            bg="#F5B942",
-            fg="#17243A",
-            font=("Segoe UI", 10, "bold"),
-            relief="flat",
-            cursor="hand2",
-            padx=15,
-            command=self.pilih_film
+            aksi, text="Reset Pilihan", command=self.reset_pilihan,
+            bg=WARNA_MERAH, fg=TEKS_UTAMA, font=("Helvetica", 10, "bold"),
+            relief="flat", padx=12, pady=6, cursor="hand2"
         ).grid(row=0, column=0, padx=8)
 
         tk.Button(
-            tombol,
-            text="Reset",
-            bg="#B1B2B5",
-            fg="#17243A",
-            font=("Segoe UI", 10, "bold"),
-            relief="flat",
-            cursor="hand2",
-            padx=15,
-            command=self.reset_pilihan
+            aksi, text="Konfirmasi Kursi", command=self.konfirmasi,
+            bg=WARNA_AKSEN, fg=TEKS_UTAMA, font=("Helvetica", 10, "bold"),
+            relief="flat", padx=12, pady=6, cursor="hand2"
         ).grid(row=0, column=1, padx=8)
 
-        self.lbl_status = tk.Label(
-            self,
-            text="Status: belum ada film yang dipilih",
-            font=("Segoe UI", 10, "bold"),
-            bg="#282727",
-            fg="#F5B942"
+        self.update_info_film()
+        self.refresh_tampilan()
+
+    def ganti_film(self):
+        """Dipanggil saat radio film diklik: pindah ke denah milik film itu."""
+        self.film = self.daftar_film[self.var_film.get()]
+        self.terpilih = []              
+        self.update_info_film()
+        self.refresh_tampilan()
+        self.update_info()
+
+    def update_info_film(self):
+        f = self.film
+        self.lbl_judul.config(text=f["judul"])
+        self.lbl_meta.config(
+            text=f"{f['genre'].strip()}  |  {f['durasi']}  |  {f['studio']}"
         )
-        self.lbl_status.pack()
+        self.lbl_jadwal.config(text=f"Jadwal: {f['jadwal']}")
+        self.lbl_sinopsis.config(text=f"Sinopsis: {f['sinopsis']}")
 
-        tk.Label(
-            self,
-            text="Â© 2026 BIOSKOP YUK | Pemilihan Film",
-            font=("Segoe UI", 9),
-            bg="#282727",
-            fg="#8795A8"
-        ).pack(pady=12)
+    def refresh_tampilan(self):
+        """Gambar ulang semua kursi sesuai denah film terpilih (perulangan bersarang)."""
+        denah = self.film["denah"]
+        for i in range(len(denah)):
+            for j in range(len(denah[i])):
+                kode = f"{self.BARIS[i]}{j + 1}"
+                btn = self.tombol[kode]
 
-    def ambil_indeks(self):
+                if denah[i][j] == "X":
+                    btn.config(text="X", bg=KURSI_TERISI, fg=TEKS_REDUP,
+                               activebackground=KURSI_TERISI)
+                elif kode in self.terpilih:
+                    btn.config(text=kode, bg=KURSI_DIPILIH, fg=TEKS_UTAMA,
+                               activebackground=KURSI_DIPILIH)
+                else:
+                    btn.config(text=kode, bg=KURSI_KOSONG, fg=TEKS_UTAMA,
+                               activebackground=KURSI_KOSONG)
 
-        pilihan = self.listbox.curselection()
-
-        if len(pilihan) == 0:
-            return None
-        else:
-            return pilihan[0]
-
-    def tampilkan_detail(self, event=None):
-
-        indeks = self.ambil_indeks()
-
-        if indeks is None:
-            self.lbl_detail.config(text="Belum ada film yang dipilih.")
-        else:
-            film = self.film[indeks]
-            self.lbl_detail.config(
-                text=f'Judul: {film["judul"]}\n'
-                     f'Genre: {film["genre"]}\n'
-                     f'Durasi: {film["durasi"]}\n'
-                     f'Jadwal: {film["jadwal"]}\n'
-                     f'Studio: {film["studio"]}\n\n'
-                     f'Sinopsis:\n{film["sinopsis"]}'
-            )
-
-    def pilih_film(self):
-
-        indeks = self.ambil_indeks()
-
-        if indeks is None:
+    def klik_kursi(self, kode, baris, kolom):
+        if self.film["denah"][baris][kolom] == "X":
             messagebox.showwarning(
-                "Peringatan",
-                "Anda belum memilih film!\nSilakan pilih minimal 1 film."
+                "Kursi Tidak Tersedia",
+                f"Kursi {kode} sudah dibeli.\nSilakan pilih kursi lain."
             )
+            return
+
+        if kode in self.terpilih:
+            self.terpilih.remove(kode)      
         else:
-            film = self.film[indeks]
+            self.terpilih.append(kode)
 
-            lanjut = messagebox.askyesno(
-                "Konfirmasi Pilihan",
-                f'Anda memilih film:\n\n'
-                f'Judul: {film["judul"]}\n'
-                f'Jadwal: {film["jadwal"]}\n'
-                f'Studio: {film["studio"]}\n\n'
-                f'Lanjutkan?'
-            )
+        self.terpilih.sort()
+        self.refresh_tampilan()
+        self.update_info()
 
-            if lanjut:
-                self.film_terpilih = film
-                self.lbl_status.config(
-                    text=f'Status: film terpilih - {film["judul"]}'
-                )
-                messagebox.showinfo(
-                    "Berhasil",
-                    f'Film "{film["judul"]}" berhasil dipilih!'
-                )
-            else:
-                self.lbl_status.config(text="Status: pemilihan dibatalkan")
+    def update_info(self):
+        if self.terpilih:
+            self.lbl_info.config(text="Kursi dipilih: " + ", ".join(self.terpilih))
+        else:
+            self.lbl_info.config(text="Kursi dipilih: -")
 
     def reset_pilihan(self):
+        self.terpilih = []
+        self.refresh_tampilan()
+        self.update_info()
 
-        self.listbox.selection_clear(0, tk.END)
-        self.film_terpilih = None
-        self.lbl_detail.config(text="Belum ada film yang dipilih.")
-        self.lbl_status.config(text="Status: belum ada film yang dipilih")
+    def konfirmasi(self):
+        if len(self.terpilih) == 0:
+            messagebox.showwarning("Peringatan", "Pilih minimal 1 kursi dulu ya!")
+            return
+
+        for kode in self.terpilih:
+            i = self.BARIS.index(kode[0])
+            j = int(kode[1:]) - 1
+            self.film["denah"][i][j] = "X"
+
+        hasil = list(self.terpilih)
+        film = self.film
+        self.terpilih = []
+        self.refresh_tampilan()
+        self.update_info()
+
+        if self.on_konfirmasi:
+            self.on_konfirmasi(film, hasil)    
+        else:
+            messagebox.showinfo(
+                "Pilihan Anda",
+                f"Film: {film['judul']}\nKursi: {', '.join(hasil)}"
+            )
+
+    def get_pilihan(self):
+        return self.film, list(self.terpilih)
 
 
 if __name__ == "__main__":
-
     root = tk.Tk()
-    root.title("BIOSKOP YUK - Pemilihan Film")
-    root.geometry("800x650")
+    root.title("BIOSKOP YUK - Pemilihan Film & Kursi")
+    root.geometry("620x680")
+    root.configure(bg=BG_UTAMA)
 
-    aplikasi = PemilihanFilmFrame(root)
-    aplikasi.pack(fill="both", expand=True)
+    PemilihanFrame(root, buat_daftar_film()).pack(fill="both", expand=True)
 
     root.mainloop()

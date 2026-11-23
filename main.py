@@ -1,5 +1,8 @@
 import tkinter as tk
+from tkinter import ttk, messagebox
+
 from katalog_film import KatalogFilmFrame
+from pemilihan import PemilihanFrame, buat_daftar_film
 from pemesanan_tiket import PemesananTiketFrame
 
 BG_UTAMA = "#121212"
@@ -11,8 +14,28 @@ TEKS_REDUP = "#A0A0A0"
 
 root = tk.Tk()
 root.title("Bioskop Yuk! - Sistem Pemesanan Tiket Bioskop")
-root.geometry("900x620")
+root.geometry("980x720")
 root.configure(bg=BG_UTAMA)
+
+style = ttk.Style()
+style.theme_use("default")
+style.configure(
+    "TNotebook",
+    background=BG_UTAMA,
+    borderwidth=0
+)
+style.configure(
+    "TNotebook.Tab",
+    background=BG_KARTU,
+    foreground=TEKS_REDUP,
+    padding=(16, 8),
+    font=("Segoe UI", 10, "bold")
+)
+style.map(
+    "TNotebook.Tab",
+    background=[("selected", WARNA_AKSEN)],
+    foreground=[("selected", "#17243A")]
+)
 
 frame_header = tk.Frame(root, bg=WARNA_HEADER, pady=15)
 frame_header.pack(fill="x")
@@ -35,38 +58,41 @@ label_subjudul = tk.Label(
 )
 label_subjudul.pack()
 
-frame_konten = tk.Frame(root, bg=BG_UTAMA, padx=15, pady=15)
-frame_konten.pack(fill="both", expand=True)
+notebook = ttk.Notebook(root)
+notebook.pack(fill="both", expand=True, padx=15, pady=15)
 
-frame_kiri = tk.Frame(frame_konten, bg=BG_KARTU, padx=5, pady=5, bd=1, relief="ridge")
-frame_kiri.pack(side="left", fill="both", expand=True, padx=(0, 5))
+tab_katalog = tk.Frame(notebook, bg=BG_UTAMA)
+tab_pemilihan = tk.Frame(notebook, bg=BG_UTAMA)
+tab_pemesanan = tk.Frame(notebook, bg=BG_UTAMA)
 
-label_section_film = tk.Label(
-    frame_kiri,
-    text="DAFTAR FILM & JADWAL",
-    font=("Segoe UI", 11, "bold"),
-    bg=BG_KARTU,
-    fg=WARNA_AKSEN
-)
-label_section_film.pack(anchor="w", pady=(0, 5))
+notebook.add(tab_katalog, text="1. Katalog Film")
+notebook.add(tab_pemilihan, text="2. Pilih Film & Kursi")
+notebook.add(tab_pemesanan, text="3. Pemesanan Tiket")
 
-katalog_film = KatalogFilmFrame(frame_kiri)
+katalog_film = KatalogFilmFrame(tab_katalog)
 katalog_film.pack(fill="both", expand=True)
 
-frame_kanan = tk.Frame(frame_konten, bg=BG_KARTU, padx=10, pady=10, bd=1, relief="ridge")
-frame_kanan.pack(side="right", fill="both", expand=True, padx=(5, 0))
+pemesanan_tiket = PemesananTiketFrame(tab_pemesanan)
+pemesanan_tiket.pack(fill="both", expand=True, padx=15, pady=15)
 
-label_section_pesan = tk.Label(
-    frame_kanan,
-    text="PEMESANAN TIKET",
-    font=("Segoe UI", 11, "bold"),
-    bg=BG_KARTU,
-    fg=WARNA_AKSEN
+
+def saat_kursi_dikonfirmasi(film, kursi):
+    pemesanan_tiket.set_pilihan(film, kursi)
+    notebook.select(tab_pemesanan)
+    messagebox.showinfo(
+        "Pilihan Disimpan",
+        f'Film: {film["judul"]}\n'
+        f'Kursi: {", ".join(kursi)}\n\n'
+        "Silakan lanjutkan ke halaman Pemesanan Tiket."
+    )
+
+
+pemilihan_film = PemilihanFrame(
+    tab_pemilihan,
+    buat_daftar_film(),
+    on_konfirmasi=saat_kursi_dikonfirmasi
 )
-label_section_pesan.pack(anchor="w", pady=(0, 5))
-
-pemesanan_tiket = PemesananTiketFrame(frame_kanan)
-pemesanan_tiket.pack(fill="both", expand=True)
+pemilihan_film.pack(fill="both", expand=True)
 
 frame_footer = tk.Frame(root, bg=BG_KARTU, pady=8)
 frame_footer.pack(fill="x", side="bottom")
@@ -80,4 +106,4 @@ label_footer = tk.Label(
 )
 label_footer.pack()
 
-root.mainloop() 
+root.mainloop()
